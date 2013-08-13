@@ -32,6 +32,7 @@
 (global-linum-mode t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+
 (setq ecb-tip-of-the-day nil)
 (ecb-layout-switch "leftright2")
 (setq ecb-source-path '("/home/andrebask/Programmazione"))
@@ -49,7 +50,7 @@
  '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-guile-binary "guile-gnome-2")
+ '(geiser-guile-binary "guile")
  '(inhibit-startup-screen t))
 
 (require 'pymacs)
@@ -134,3 +135,18 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+(require 'ghc-flymake)
+
+(defun flymake-create-temp-in-system-tempdir (filename prefix)
+  (make-temp-file (or prefix "flymake")))
+
+(defun ghc-flymake-init ()
+     ; Make sure it's not a remote buffer or flymake would not work
+     (when (not (subsetp (list (current-buffer)) (tramp-list-remote-buffers)))
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-in-system-tempdir))
+             (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "ghcflakes" (list temp-file)))))
