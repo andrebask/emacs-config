@@ -126,6 +126,7 @@
 (add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
 
 (require 'company)
+(setq company-backends '())
 (company-mode)
 (add-hook 'after-init-hook 'global-company-mode)
 
