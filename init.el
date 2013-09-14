@@ -3,6 +3,7 @@
 (load "color-theme/color-theme-oblivion")
 (load "linum-scale/linum-scale")
 (load "buffcycle/buffcycle")
+(load "smooth-scroll/smooth-scroll")
 (load "pycomplete/pycomplete")
 (load "tabbar/tabbar")
 (load "scheme/company/company")
@@ -14,6 +15,9 @@
 (delete-selection-mode 1)
 (set-default-font "Source Code Pro")
 (setq mouse-drag-copy-region nil)
+
+(if window-system
+    (set-frame-size (selected-frame) 164 47))
 
 (require 'tabbar)
 (tabbar-mode)
@@ -32,6 +36,9 @@
 (global-linum-mode t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(require 'smooth-scroll)
+(smooth-scroll-mode t)
+
 (setq ecb-tip-of-the-day nil)
 (ecb-layout-switch "leftright2")
 (setq ecb-source-path '("/home/andrebask/Programmazione"))
@@ -49,7 +56,7 @@
  '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-guile-binary "guile-gnome-2")
+ '(geiser-guile-binary "guile")
  '(inhibit-startup-screen t))
 
 (require 'pymacs)
