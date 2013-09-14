@@ -141,3 +141,18 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
+
+(require 'ghc-flymake)
+
+(defun flymake-create-temp-in-system-tempdir (filename prefix)
+  (make-temp-file (or prefix "flymake")))
+
+(defun ghc-flymake-init ()
+     ; Make sure it's not a remote buffer or flymake would not work
+     (when (not (subsetp (list (current-buffer)) (tramp-list-remote-buffers)))
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-in-system-tempdir))
+             (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "ghcflakes" (list temp-file)))))
