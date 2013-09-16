@@ -48,17 +48,6 @@
 (require 'redo+)
 (global-set-key (kbd "C-y") 'redo)
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
- '(ecb-options-version "2.40")
- '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-guile-binary "guile")
- '(inhibit-startup-screen t))
-
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
@@ -136,6 +125,24 @@
 ;; (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.vs\\'" . glsl-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.fs\\'" . glsl-mode))
+
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(ac-modes (quote (emacs-lisp-mode lisp-interaction-mode c-mode cc-mode c++-mode java-mode clojure-mode scala-mode scheme-mode ocaml-mode tuareg-mode perl-mode cperl-mode python-mode ruby-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode haskell-mode)))
+ '(ecb-layout-window-sizes (quote (("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
+ '(ecb-options-version "2.40")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
+ '(geiser-guile-binary "guile")
+ '(inhibit-startup-screen t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -143,17 +150,12 @@
   ;; If there is more than one, they won't work right.
  )
 
-(require 'ghc-flymake)
 
-(defun flymake-create-temp-in-system-tempdir (filename prefix)
-  (make-temp-file (or prefix "flymake")))
-
-(defun ghc-flymake-init ()
-     ; Make sure it's not a remote buffer or flymake would not work
-     (when (not (subsetp (list (current-buffer)) (tramp-list-remote-buffers)))
-      (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                    'flymake-create-temp-in-system-tempdir))
-             (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "ghcflakes" (list temp-file)))))
+;; ELPA
+(load "package/package")
+(require 'package)
+;; Any add to list for package-archives (to add marmalade or melpa) goes here
+(add-to-list 'package-archives
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
+(package-initialize)
