@@ -8,6 +8,8 @@
 (load "scheme/company/company")
 (load "scheme/paredit")
 (load "scheme/geiser/elisp/geiser")
+(load "auto-complete-haskell/auto-complete-haskell")
+(load "yesod/hamlet-mode")
 ;; (load "glsl-mode/glsl-mode")
 
 (server-start)
@@ -41,17 +43,6 @@
 
 (require 'redo+)
 (global-set-key (kbd "C-y") 'redo)
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
- '(ecb-options-version "2.40")
- '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-guile-binary "guile")
- '(inhibit-startup-screen t))
 
 (require 'pymacs)
 (pymacs-load "ropemacs" "rope-")
@@ -129,12 +120,14 @@
 ;; (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.vs\\'" . glsl-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.fs\\'" . glsl-mode))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
+
+;; Haskell
+(require 'auto-complete-haskell)
+;; Somehow the hook doesn't enable auto-complete-mode for Haskell although it should
+;; ac-modes lists all modes with auto-complete enabled
+(setq ac-modes
+      (append '(scheme-mode haskell-mode literate-haskell-mode tuareg-mode js-mode inferior-haskell-mode)
+              ac-modes))
 
 (require 'ghc-flymake)
 
@@ -150,3 +143,51 @@
                       temp-file
                       (file-name-directory buffer-file-name))))
     (list "ghcflakes" (list temp-file)))))
+
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
+(add-hook 'haskell-mode-hook
+	  (lambda ()
+	    (ghc-init)
+	    (require 'auto-complete-config)
+	    (auto-complete-mode t)
+	    (add-to-list 'ac-sources 'ac-source-ghc-mod)))
+;; haskell-mode hooks
+(add-hook 'haskell-mode-hook 'capitalized-words-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+
+(require 'hamlet-mode)
+
+
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
+ '(ecb-options-version "2.40")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
+ '(geiser-guile-binary "guile")
+ '(haskell-doc-show-global-types t)
+ '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)))
+ '(inhibit-startup-screen t))
+
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+
+(require 'package)
+;; Any add to list for package-archives (to add marmalade or melpa) goes here
+(add-to-list 'package-archives
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
+(package-initialize)
+
+(add-to-list 'auto-mode-alist
+	     '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist
+	     '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode))
