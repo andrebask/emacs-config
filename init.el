@@ -39,9 +39,14 @@
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
 
+;;(global-ede-mode 1)                      ; Enable the Project management system
+;;(semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion
+;;(global-srecode-minor-mode 1)            ; Enable template insertion menu
+
 (setq ecb-tip-of-the-day nil)
+(setq stack-trace-on-error t)
 (ecb-layout-switch "leftright2")
-(setq ecb-source-path '("/home/andrebask/Programmazione"))
+(setq ecb-source-path '("/home/andrebask"))
 (require 'ecb)
 (setq ecb-auto-activate 1)
 
@@ -142,6 +147,9 @@
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
  '(geiser-guile-binary "guile")
+ '(inhibit-startup-screen t) 
+ '(haskell-doc-show-global-types t)
+ '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)))
  '(inhibit-startup-screen t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
@@ -150,6 +158,30 @@
   ;; If there is more than one, they won't work right.
  )
 
+(defun ghc-flymake-init ()
+     ; Make sure it's not a remote buffer or flymake would not work
+     (when (not (subsetp (list (current-buffer)) (tramp-list-remote-buffers)))
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-in-system-tempdir))
+             (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list "ghcflakes" (list temp-file)))))
+
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
+(add-hook 'haskell-mode-hook
+	  (lambda ()
+	    (ghc-init)
+	    (require 'auto-complete-config)
+	    (auto-complete-mode t)
+	    (add-to-list 'ac-sources 'ac-source-ghc-mod)))
+;; haskell-mode hooks
+(add-hook 'haskell-mode-hook 'capitalized-words-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(require 'hamlet-mode)
 
 ;; ELPA
 (load "package/package")
@@ -159,3 +191,8 @@
     '("marmalade" .
       "http://marmalade-repo.org/packages/"))
 (package-initialize)
+
+(add-to-list 'auto-mode-alist
+	     '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist
+	     '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode))
