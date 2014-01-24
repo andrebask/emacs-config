@@ -3,6 +3,7 @@
 (load "color-theme/color-theme-oblivion")
 (load "linum-scale/linum-scale")
 (load "buffcycle/buffcycle")
+(load "smooth-scroll/smooth-scroll")
 (load "pycomplete/pycomplete")
 (load "tabbar/tabbar")
 (load "scheme/company/company")
@@ -16,6 +17,9 @@
 (delete-selection-mode 1)
 (set-default-font "Source Code Pro")
 (setq mouse-drag-copy-region nil)
+
+(if window-system
+    (set-frame-size (selected-frame) 164 47))
 
 (require 'tabbar)
 (tabbar-mode)
@@ -34,8 +38,11 @@
 (global-linum-mode t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(require 'smooth-scroll)
+(smooth-scroll-mode t)
 
 (setq ecb-tip-of-the-day nil)
+(setq stack-trace-on-error t)
 (ecb-layout-switch "leftright2")
 (setq ecb-source-path '("/home/andrebask/Programmazione"))
 (require 'ecb)
@@ -111,6 +118,7 @@
 (add-hook 'scheme-mode-hook           (lambda () (paredit-mode +1)))
 
 (require 'company)
+(setq company-backends '())
 (company-mode)
 (add-hook 'after-init-hook 'global-company-mode)
 
@@ -121,6 +129,7 @@
 ;; (add-to-list 'auto-mode-alist '("\\.vs\\'" . glsl-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.fs\\'" . glsl-mode))
 
+
 ;; Haskell
 (require 'auto-complete-haskell)
 ;; Somehow the hook doesn't enable auto-complete-mode for Haskell although it should
@@ -129,10 +138,26 @@
       (append '(scheme-mode haskell-mode literate-haskell-mode tuareg-mode js-mode inferior-haskell-mode)
               ac-modes))
 
-(require 'ghc-flymake)
-
-(defun flymake-create-temp-in-system-tempdir (filename prefix)
-  (make-temp-file (or prefix "flymake")))
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(ac-modes (quote (emacs-lisp-mode lisp-interaction-mode c-mode cc-mode c++-mode java-mode clojure-mode scala-mode scheme-mode ocaml-mode tuareg-mode perl-mode cperl-mode python-mode ruby-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode haskell-mode)))
+ '(ecb-layout-window-sizes (quote (("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
+ '(ecb-options-version "2.40")
+ '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
+ '(geiser-guile-binary "guile")
+ '(inhibit-startup-screen t) 
+ '(haskell-doc-show-global-types t)
+ '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)))
+ '(inhibit-startup-screen t))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
 
 (defun ghc-flymake-init ()
      ; Make sure it's not a remote buffer or flymake would not work
@@ -155,31 +180,12 @@
 ;; haskell-mode hooks
 (add-hook 'haskell-mode-hook 'capitalized-words-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
-
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 (require 'hamlet-mode)
 
-
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-layout-window-sizes (quote (("left8" (ecb-directories-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-sources-buffer-name 0.20121951219512196 . 0.2391304347826087) (ecb-methods-buffer-name 0.20121951219512196 . 0.2826086956521739) (ecb-history-buffer-name 0.20121951219512196 . 0.17391304347826086)) ("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
- '(ecb-options-version "2.40")
- '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-guile-binary "guile")
- '(haskell-doc-show-global-types t)
- '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)))
- '(inhibit-startup-screen t))
-
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
-
+;; ELPA
+(load "package/package")
 (require 'package)
 ;; Any add to list for package-archives (to add marmalade or melpa) goes here
 (add-to-list 'package-archives
