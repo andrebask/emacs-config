@@ -41,10 +41,14 @@
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
 
+;;(global-ede-mode 1)                      ; Enable the Project management system
+;;(semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion
+;;(global-srecode-minor-mode 1)            ; Enable template insertion menu
+
 (setq ecb-tip-of-the-day nil)
 (setq stack-trace-on-error t)
 (ecb-layout-switch "leftright2")
-(setq ecb-source-path '("/home/andrebask/Programmazione"))
+(setq ecb-source-path '("/home/andrebask"))
 (require 'ecb)
 (setq ecb-auto-activate 1)
 
