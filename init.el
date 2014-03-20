@@ -1,5 +1,6 @@
 (setq load-path (cons "~/.emacs.d" load-path))
 (load "redoplus/redoplus")
+(load "color-theme/color-theme")
 (load "color-theme/color-theme-oblivion")
 (load "linum-scale/linum-scale")
 (load "buffcycle/buffcycle")
@@ -15,7 +16,8 @@
 
 (server-start)
 (delete-selection-mode 1)
-(set-default-font "Source Code Pro")
+(set-default-font "Inconsolata")
+(set-face-attribute 'default nil :height 140)
 (setq mouse-drag-copy-region nil)
 
 (if window-system
@@ -32,7 +34,6 @@
 (require 'color-theme)
 (eval-after-load "color-theme"
   '(progn
-     (color-theme-initialize)
      (color-theme-oblivion)))
 
 (global-linum-mode t)
@@ -143,24 +144,24 @@
               ac-modes))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(ac-modes (quote (emacs-lisp-mode lisp-interaction-mode c-mode cc-mode c++-mode java-mode clojure-mode scala-mode scheme-mode ocaml-mode tuareg-mode perl-mode cperl-mode python-mode ruby-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode haskell-mode)))
- '(ecb-layout-window-sizes (quote (("leftright2" (ecb-directories-buffer-name 0.12804878048780488 . 0.5957446808510638) (ecb-sources-buffer-name 0.12804878048780488 . 0.3829787234042553) (ecb-methods-buffer-name 0.12195121951219512 . 0.5957446808510638) (ecb-history-buffer-name 0.12195121951219512 . 0.3829787234042553)))))
+ '(ecb-layout-window-sizes (quote (("leftright2" (ecb-directories-buffer-name 0.1524390243902439 . 0.6382978723404256) (ecb-sources-buffer-name 0.1524390243902439 . 0.3404255319148936) (ecb-methods-buffer-name 0.17682926829268292 . 0.6382978723404256) (ecb-history-buffer-name 0.17682926829268292 . 0.3404255319148936)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
+ '(geiser-active-implementations (quote (guile racket)))
  '(geiser-guile-binary "guile")
- '(inhibit-startup-screen t) 
  '(haskell-doc-show-global-types t)
- '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)))
+ '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)) t)
  '(inhibit-startup-screen t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 (defun ghc-flymake-init ()
@@ -186,7 +187,7 @@
 (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(require 'hamlet-mode)
+;;(require 'hamlet-mode)
 
 ;; ELPA
 (load "package/package")
