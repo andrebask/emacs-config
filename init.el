@@ -17,6 +17,7 @@
 (set-default-font "Inconsolata")
 (set-face-attribute 'default nil :height 140)
 (setq mouse-drag-copy-region nil)
+(setq ring-bell-function 'ignore)
 
 (if window-system
     (set-frame-size (selected-frame) 164 47))
