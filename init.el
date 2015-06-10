@@ -8,17 +8,20 @@
 (load "pycomplete/pycomplete")
 (load "tabbar/tabbar")
 (load "scheme/company/company")
-(load "scheme/paredit")
-(load "scheme/geiser/elisp/geiser")
+;;(load "scheme/paredit")
+;;(load "scheme/geiser/elisp/geiser")
 (load "auto-complete-haskell/auto-complete-haskell")
 (load "yesod/hamlet-mode")
 ;; (load "glsl-mode/glsl-mode")
+(require 'quack)
 
 (server-start)
 (delete-selection-mode 1)
 (set-default-font "Inconsolata")
 (set-face-attribute 'default nil :height 140)
 (setq mouse-drag-copy-region nil)
+(setq make-backup-files nil)
+(global-set-key (kbd "C-a") 'mark-whole-buffer)
 
 (if window-system
     (set-frame-size (selected-frame) 164 47))
@@ -148,15 +151,31 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-modes (quote (emacs-lisp-mode lisp-interaction-mode c-mode cc-mode c++-mode java-mode clojure-mode scala-mode scheme-mode ocaml-mode tuareg-mode perl-mode cperl-mode python-mode ruby-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode haskell-mode)))
- '(ecb-layout-window-sizes (quote (("leftright2" (ecb-directories-buffer-name 0.1524390243902439 . 0.6382978723404256) (ecb-sources-buffer-name 0.1524390243902439 . 0.3404255319148936) (ecb-methods-buffer-name 0.17682926829268292 . 0.6382978723404256) (ecb-history-buffer-name 0.17682926829268292 . 0.3404255319148936)))))
+ '(TeX-PDF-mode t)
+ '(ac-modes
+   (quote
+    (emacs-lisp-mode lisp-interaction-mode c-mode cc-mode c++-mode java-mode clojure-mode scala-mode scheme-mode ocaml-mode tuareg-mode perl-mode cperl-mode python-mode ruby-mode ecmascript-mode javascript-mode js-mode js2-mode php-mode css-mode makefile-mode sh-mode fortran-mode f90-mode ada-mode xml-mode sgml-mode haskell-mode)))
+ '(ecb-layout-window-sizes
+   (quote
+    (("leftright2"
+      (ecb-directories-buffer-name 0.1524390243902439 . 0.6382978723404256)
+      (ecb-sources-buffer-name 0.1524390243902439 . 0.3404255319148936)
+      (ecb-methods-buffer-name 0.17682926829268292 . 0.6382978723404256)
+      (ecb-history-buffer-name 0.17682926829268292 . 0.3404255319148936)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
  '(geiser-active-implementations (quote (guile racket)))
  '(geiser-guile-binary "guile")
  '(haskell-doc-show-global-types t)
- '(haskell-mode-hook (quote (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode (lambda nil (ghc-init) (flymake-mode)) turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)) t)
- '(inhibit-startup-screen t))
+ '(haskell-mode-hook
+   (quote
+    (turn-on-haskell-indent turn-on-eldoc-mode turn-on-haskell-doc-mode
+			    (lambda nil
+			      (ghc-init)
+			      (flymake-mode))
+			    turn-on-haskell-indentation turn-on-haskell-decl-scan turn-on-font-lock)) t)
+ '(inhibit-startup-screen t)
+ '(quack-default-program "kawa"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -202,3 +221,11 @@
 	     '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist
 	     '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'" . ruby-mode))
+
+(setq ispell-dictionary "en_GB")
+
+(setq auto-mode-alist
+  (cons (cons "\\.md" 'markdown-mode)
+	auto-mode-alist))
+
+(add-hook 'markdown-mode-hook 'flyspell-mode)
