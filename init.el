@@ -11,13 +11,13 @@
 ;;(load "scheme/paredit")
 ;;(load "scheme/geiser/elisp/geiser")
 (load "auto-complete-haskell/auto-complete-haskell")
-(load "yesod/hamlet-mode")
+;;(load "yesod/hamlet-mode")
 ;; (load "glsl-mode/glsl-mode")
 (require 'quack)
 
 (server-start)
 (delete-selection-mode 1)
-(set-default-font "Inconsolata")
+(set-default-font "Source Code Pro")
 (set-face-attribute 'default nil :height 140)
 (setq mouse-drag-copy-region nil)
 (setq ring-bell-function 'ignore)
@@ -102,6 +102,16 @@
 
 (global-set-key [f11] 'toggle-fullscreen)
 
+
+
+(defun fullscreen (&optional f)
+  (interactive)
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+			 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+			 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0)))
+(fullscreen)
+
 ;; python-mode settings
 (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
 (setq interpreter-mode-alist(cons '("python" . python-mode)
@@ -159,14 +169,14 @@
  '(ecb-layout-window-sizes
    (quote
     (("leftright2"
-      (ecb-directories-buffer-name 0.1524390243902439 . 0.6382978723404256)
-      (ecb-sources-buffer-name 0.1524390243902439 . 0.3404255319148936)
-      (ecb-methods-buffer-name 0.17682926829268292 . 0.6382978723404256)
-      (ecb-history-buffer-name 0.17682926829268292 . 0.3404255319148936)))))
+      (ecb-directories-buffer-name 0.05847953216374269 . 0.65)
+      (ecb-sources-buffer-name 0.05847953216374269 . 0.35)
+      (ecb-methods-buffer-name 0.1286549707602339 . 0.65)
+      (ecb-history-buffer-name 0.1286549707602339 . 0.35)))))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
- '(geiser-active-implementations (quote (guile racket)))
- '(geiser-guile-binary "guile")
+ ;;'(geiser-active-implementations (quote (guile racket)))
+ ;;'(geiser-guile-binary "guile")
  '(haskell-doc-show-global-types t)
  '(haskell-mode-hook
    (quote
