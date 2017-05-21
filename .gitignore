@@ -1,3 +1,7 @@
 *.elc
 *~
 *.dat
+*.data
+elpa/
+todo/
+auto-save-list/
