@@ -23,12 +23,12 @@
     (transient-mark-mode 1) ;; No region when it is not highlighted
     (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
 
-(require 'maxframe)
-(setq mf-max-height 1040)
-(add-hook 'window-setup-hook 'maximize-frame t)
+(toggle-frame-maximized)
 
 (require 'sr-speedbar)
 (global-set-key (kbd "s-s") 'sr-speedbar-toggle)
+(setq speedbar-directory-unshown-regexp "^$")
+(setq speedbar-show-unknown-files t)
 
 (require 'tabbar)
 (tabbar-mode)
@@ -52,3 +52,17 @@
 
 (setq ispell-dictionary "en_GB")
 (add-hook 'markdown-mode-hook 'flyspell-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (elm-mode tabbar-ruler sr-speedbar smooth-scrolling redo+ pc-bufsw markdown-mode company-quickhelp color-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
