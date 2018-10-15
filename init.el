@@ -9,6 +9,7 @@
 (setq inhibit-startup-screen t)
 (setq stack-trace-on-error t)
 (delete-selection-mode 1)
+(setq-default indent-tabs-mode nil)
 (set-default-font "Source Code Pro")
 (set-face-attribute 'default nil :height 140)
 (setq mouse-drag-copy-region nil)
@@ -52,17 +53,3 @@
 
 (setq ispell-dictionary "en_GB")
 (add-hook 'markdown-mode-hook 'flyspell-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (elm-mode tabbar-ruler sr-speedbar smooth-scrolling redo+ pc-bufsw markdown-mode company-quickhelp color-theme))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
