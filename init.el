@@ -53,3 +53,57 @@
 
 (setq ispell-dictionary "en_GB")
 (add-hook 'markdown-mode-hook 'flyspell-mode)
+
+;; ctrl+backspace delete by Aborn Jiang
+;; https://stackoverflow.com/questions/28221079
+;; changed to avoid use of s library
+(require 'subr-x)
+(defun aborn/backward-kill-word ()
+  "Customize/Smart backward-kill-word."
+  (interactive)
+  (let* ((cp (point))
+         (backword)
+         (end)
+         (space-pos)
+         (backword-char (if (bobp)
+                            ""           ;; cursor in begin of buffer
+                          (buffer-substring cp (- cp 1)))))
+    (if (equal (length backword-char) (string-width backword-char))
+        (progn
+          (save-excursion
+            (setq backword (buffer-substring (point) (progn (forward-word -1) (point)))))
+          (setq ab/debug backword)
+          (save-excursion
+            (when (and backword          ;; when backword contains space
+                       (cl-search " " backword))
+              (setq space-pos (ignore-errors (search-backward " ")))))
+          (save-excursion
+            (let* ((pos (ignore-errors (search-backward-regexp "\n")))
+                   (substr (when pos (buffer-substring pos cp))))
+              (when (or (and substr (eq "" (string-trim substr)))
+                        (cl-search "\n" backword))
+                (setq end pos))))
+          (if end
+              (kill-region cp end)
+            (if space-pos
+                (kill-region cp space-pos)
+              (backward-kill-word 1))))
+      (kill-region cp (- cp 1)))         ;; word is non-english word
+    ))
+
+(global-set-key  [C-backspace]
+                 'aborn/backward-kill-word)
+
+;; duplicate line
+;; https://stackoverflow.com/questions/88399
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (newline)
+  (yank)
+  )
+
+(global-set-key (kbd "C-d") 'kill-line)
+(global-set-key (kbd "C-S-d") 'duplicate-line)
