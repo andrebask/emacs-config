@@ -40,11 +40,7 @@
 ;; Print left margin
 (setq lpr-page-header-switches (quote ("-o6")))
 
-(require 'color-theme)
-(load-file "~/.emacs.d/color-theme/color-theme-oblivion.el")
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-oblivion)))
+(load-file "~/.emacs.d/color-theme/Oblivion-theme.el")
 
 (require 'smooth-scrolling)
 
